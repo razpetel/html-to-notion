@@ -1,0 +1,14 @@
+{
+  "name": "razpetel",
+  "owner": {
+    "name": "razpetel"
+  },
+  "plugins": [
+    {
+      "name": "html-to-notion",
+      "source": "./",
+      "version": "1.0.0",
+      "description": "Convert rich HTML to Notion-importable Markdown — preserves Mermaid diagrams, tables, callouts, and CSS visual components"
+    }
+  ]
+}
