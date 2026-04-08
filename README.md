@@ -20,6 +20,19 @@ Convert rich HTML documents into Notion-importable Markdown ZIP archives with sc
 
 ## Installation
 
+### Claude Code Plugin (Recommended)
+
+Install directly in [Claude Code](https://claude.ai/code) as a skill:
+
+```
+/plugin marketplace add razpetel/html-to-notion
+/plugin install html-to-notion@razpetel
+```
+
+Once installed, Claude Code will automatically detect when you need to convert HTML to Notion and use this skill. You can also invoke it explicitly with `/html-to-notion`.
+
+### Manual Installation
+
 ```bash
 # Clone the repository
 git clone https://github.com/razpetel/html-to-notion.git
@@ -77,11 +90,13 @@ html-to-notion convert <input> [options]
 
 | Flag | Description | Default |
 |------|-------------|---------|
-| `-o, --output <dir>` | Output directory | `./notion_output` |
+| `-o, --output <dir>` | Output directory | `./notion_export/` |
 | `--no-screenshots` | Skip CSS component screenshots | `false` |
 | `--no-mermaid-png` | Skip Mermaid PNG fallback rendering | `false` |
 | `--viewport <width>` | Browser viewport width for screenshots | `1200` |
-| `--zip` | Bundle output as `notion_import.zip` | `true` |
+| `--mermaid-theme <name>` | Mermaid theme: default, neutral, dark, forest, base | `neutral` |
+| `--no-zip` | Skip ZIP archive creation | `false` |
+| `-v, --verbose` | Show detailed progress output | `false` |
 | `-h, --help` | Show help | -- |
 
 ### Examples
@@ -96,8 +111,11 @@ npx html-to-notion convert dashboard.html -o ~/notion-import --viewport 1400
 # Text-only conversion (no browser needed)
 npx html-to-notion convert notes.html --no-screenshots --no-mermaid-png
 
-# Convert with all defaults (screenshots + mermaid + zip)
-npx html-to-notion convert presentation.html -o output/ --zip
+# Convert without ZIP (just the output directory)
+npx html-to-notion convert presentation.html -o output/ --no-zip
+
+# Use dark theme for Mermaid diagrams with verbose logging
+npx html-to-notion convert dashboard.html --mermaid-theme dark -v
 ```
 
 ## Architecture
