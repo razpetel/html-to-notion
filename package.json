@@ -1,0 +1,34 @@
+{
+  "name": "html-to-notion",
+  "version": "1.0.0",
+  "description": "Convert rich HTML to Notion-importable Markdown — preserves Mermaid diagrams, tables, callouts, and CSS visual components",
+  "main": "src/assembler.js",
+  "bin": {
+    "html-to-notion": "./bin/html-to-notion.js"
+  },
+  "scripts": {
+    "test": "node test/test-convert.js",
+    "convert": "node bin/html-to-notion.js convert"
+  },
+  "keywords": [
+    "notion",
+    "html",
+    "markdown",
+    "mermaid",
+    "converter",
+    "import",
+    "claude-code",
+    "skill"
+  ],
+  "author": "Raz Petel",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^12.0.0"
+  },
+  "devDependencies": {
+    "playwright": "^1.50.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
