@@ -1,6 +1,6 @@
 ---
 name: html-to-notion
-description: Use when converting HTML files, reports, or notebooks to Notion-importable format — especially when preserving Mermaid diagrams, styled tables, CSS visual components like progress bars or stat cards, callout boxes, timelines, or code blocks during HTML-to-Notion migration
+description: Use when converting HTML files, reports, notebooks, or dashboards to Notion-importable format — especially when source contains Mermaid diagrams, styled tables, CSS visual components, callout boxes, timelines, or code blocks that need migration to Notion via Markdown import
 ---
 
 ## Overview
@@ -50,12 +50,14 @@ Pipeline: `converter.py` (HTML to Markdown + manifest) -> `screenshotter.js` + `
 html-to-notion convert <input.html> [options]
 
 Options:
-  -o, --output <dir>     Output directory (default: ./notion_output)
-  --no-screenshots       Skip Playwright screenshots of CSS components
-  --no-mermaid-png       Skip Mermaid PNG fallback rendering
-  --viewport <width>     Viewport width for screenshots (default: 1200)
-  --zip                  Create notion_import.zip (default: true)
-  -h, --help             Show help
+  -o, --output <dir>      Output directory (default: ./notion_export/)
+  --no-screenshots        Skip Playwright screenshots of CSS components
+  --no-mermaid-png        Skip Mermaid PNG fallback rendering
+  --viewport <width>      Viewport width for screenshots (default: 1200)
+  --mermaid-theme <name>  Mermaid theme: default, neutral, dark, forest, base (default: neutral)
+  --no-zip                Skip ZIP creation (ZIP created by default)
+  -v, --verbose           Show detailed progress
+  -h, --help              Show help
 ```
 
 ## Common Mistakes

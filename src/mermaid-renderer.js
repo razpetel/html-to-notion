@@ -22,7 +22,12 @@ function parseArgs(argv) {
       case '--input':    args.input    = argv[++i]; break;
       case '--output':   args.output   = argv[++i]; break;
       case '--theme':    args.theme    = argv[++i]; break;
-      case '--viewport': args.viewport = parseInt(argv[++i], 10); break;
+      case '--viewport': {
+        const v = parseInt(argv[++i], 10);
+        if (isNaN(v) || v <= 0) { console.error('--viewport must be a positive integer'); process.exit(1); }
+        args.viewport = v;
+        break;
+      }
       case '--help': case '-h':
         printUsage();
         process.exit(0);
@@ -59,7 +64,18 @@ function escapeHtml(str) {
     .replace(/"/g, '&quot;');
 }
 
+const VALID_THEMES = ['default', 'neutral', 'dark', 'forest', 'base'];
+
+function validateTheme(theme) {
+  if (!VALID_THEMES.includes(theme)) {
+    console.error(`Invalid theme: "${theme}". Valid themes: ${VALID_THEMES.join(', ')}`);
+    process.exit(1);
+  }
+  return theme;
+}
+
 function buildHtml(mmdSource, theme) {
+  const safeTheme = validateTheme(theme);
   return `<!DOCTYPE html>
 <html>
 <head>
@@ -85,7 +101,7 @@ function buildHtml(mmdSource, theme) {
   <script>
     mermaid.initialize({
       startOnLoad: true,
-      theme: '${theme}',
+      theme: '${safeTheme}',
       flowchart: { useMaxWidth: false },
       sequence: { useMaxWidth: false }
     });

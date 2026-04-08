@@ -39,7 +39,7 @@ async function convert(options) {
     const stdout = execSync(cmd, { encoding: 'utf-8', maxBuffer: 50 * 1024 * 1024 });
     converterResult = JSON.parse(stdout);
     stats.steps.push('converter');
-    log(`  Converter produced: ${converterResult.markdown_file || 'output'}`);
+    log(`  Converter produced: ${converterResult.markdown_path || 'output'}`);
   } catch (err) {
     if (err.message && err.message.includes('python3')) {
       throw new Error(
@@ -115,8 +115,8 @@ async function convert(options) {
 
   // --- Step 4: Post-process markdown — verify image references ---
   log('Verifying image references...');
-  const mdFile = converterResult.markdown_file
-    ? path.resolve(output, path.basename(converterResult.markdown_file))
+  const mdFile = converterResult.markdown_path
+    ? path.resolve(converterResult.markdown_path)
     : findMarkdownFile(output);
 
   if (mdFile && fs.existsSync(mdFile)) {
@@ -213,12 +213,12 @@ async function createZip(sourceDir, zipPath) {
       out.on('close', resolve);
       archive.on('error', reject);
       archive.pipe(out);
-      archive.directory(sourceDir, false);
+      archive.directory(sourceDir, path.basename(sourceDir));
       archive.finalize();
     });
   } catch (_) {
     // Fall back to shell zip
-    execSync(`zip -r -j ${quote(zipPath)} ${quote(sourceDir)}`, {
+    execSync(`cd ${quote(path.dirname(sourceDir))} && zip -r ${quote(zipPath)} ${quote(path.basename(sourceDir))}`, {
       encoding: 'utf-8',
       stdio: 'pipe',
     });
