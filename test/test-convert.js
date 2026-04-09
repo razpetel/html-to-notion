@@ -12,7 +12,7 @@ const assert = require('assert');
 const ROOT = path.resolve(__dirname, '..');
 const FIXTURE = path.join(__dirname, 'fixtures', 'sample.html');
 const OUT_DIR = '/tmp/html-to-notion-test';
-const CLI = path.join(ROOT, 'bin', 'html-to-notion.js');
+const CLI = path.join(ROOT, 'scripts', 'html-to-notion.js');
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -59,13 +59,13 @@ fs.mkdirSync(OUT_DIR, { recursive: true });
 let converterAvailable = true;
 try {
   // Check that the assembler module exists (converter core)
-  require.resolve(path.join(ROOT, 'src', 'assembler'));
+  require.resolve(path.join(ROOT, 'scripts', 'assembler'));
 } catch {
   converterAvailable = false;
 }
 
 if (!converterAvailable) {
-  console.log('Converter (src/assembler.js) not yet available — running fixture-only checks.\n');
+  console.log('Converter (scripts/assembler.js) not yet available — running fixture-only checks.\n');
 } else {
   console.log(`Running: node ${CLI} convert ${FIXTURE} -o ${OUT_DIR} --no-screenshots --no-mermaid-png`);
   try {

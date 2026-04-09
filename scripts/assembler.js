@@ -146,7 +146,7 @@ async function convert(options) {
   }
 
   // --- Step 5: Copy import instructions ---
-  const instructionsSrc = path.join(__dirname, '..', 'templates', 'IMPORT_INSTRUCTIONS.md');
+  const instructionsSrc = path.join(__dirname, '..', 'references', 'IMPORT_INSTRUCTIONS.md');
   if (fs.existsSync(instructionsSrc)) {
     const instructionsDst = path.join(output, 'IMPORT_INSTRUCTIONS.md');
     fs.copyFileSync(instructionsSrc, instructionsDst);

@@ -2,13 +2,13 @@
   "name": "html-to-notion",
   "version": "1.0.0",
   "description": "Convert rich HTML to Notion-importable Markdown — preserves Mermaid diagrams, tables, callouts, and CSS visual components",
-  "main": "src/assembler.js",
+  "main": "scripts/assembler.js",
   "bin": {
     "html-to-notion": "./bin/html-to-notion.js"
   },
   "scripts": {
     "test": "node test/test-convert.js",
-    "convert": "node bin/html-to-notion.js convert"
+    "convert": "node scripts/html-to-notion.js convert"
   },
   "keywords": [
     "notion",

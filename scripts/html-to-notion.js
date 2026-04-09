@@ -3,7 +3,7 @@
 
 const { Command } = require('commander');
 const path = require('path');
-const { convert } = require('../src/assembler');
+const { convert } = require('./assembler');
 const pkg = require('../package.json');
 
 const program = new Command();
