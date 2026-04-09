@@ -1,14 +1,22 @@
 {
   "name": "razpetel",
   "owner": {
-    "name": "razpetel"
+    "name": "Raz Petel",
+    "email": "raz@firmus.ai"
+  },
+  "metadata": {
+    "description": "Skills by Raz Petel",
+    "version": "1.0.0"
   },
   "plugins": [
     {
       "name": "html-to-notion",
+      "description": "Convert rich HTML to Notion-importable Markdown -- preserves Mermaid diagrams, tables, callouts, and CSS visual components",
       "source": "./",
-      "version": "1.0.0",
-      "description": "Convert rich HTML to Notion-importable Markdown — preserves Mermaid diagrams, tables, callouts, and CSS visual components"
+      "strict": false,
+      "skills": [
+        "./"
+      ]
     }
   ]
 }
