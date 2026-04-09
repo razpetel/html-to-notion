@@ -1,6 +1,5 @@
 # html-to-notion
 
-[![npm version](https://img.shields.io/npm/v/html-to-notion)](https://www.npmjs.com/package/html-to-notion)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node.js >= 18](https://img.shields.io/badge/node-%3E%3D18-brightgreen)](https://nodejs.org/)
 
@@ -46,19 +45,12 @@ pip install -r requirements.txt
 
 # Install Playwright browser (required for screenshots)
 npx playwright install chromium
+
+# Quick start: convert an HTML file
+node scripts/html-to-notion.js convert my-report.html -o output/
 ```
 
-## Quick Start
-
-```bash
-# 1. Convert your HTML file
-npx html-to-notion convert my-report.html -o output/
-
-# 2. Find the ZIP in the output directory
-ls output/notion_import.zip
-
-# 3. Import into Notion: Settings > Import > Markdown & CSV > Upload ZIP
-```
+For CLI reference and detailed usage, see [SKILL.md](SKILL.md). For architecture details, see [references/ARCHITECTURE.md](references/ARCHITECTURE.md).
 
 ## What Gets Preserved
 
@@ -80,114 +72,6 @@ ls output/notion_import.zip
 | Colored badges | `[badge text]` | Plain text |
 | Side-by-side layouts | Sequential content | Stacked vertically |
 
-## CLI Reference
-
-```
-html-to-notion convert <input> [options]
-```
-
-### Options
-
-| Flag | Description | Default |
-|------|-------------|---------|
-| `-o, --output <dir>` | Output directory | `./notion_export/` |
-| `--no-screenshots` | Skip CSS component screenshots | `false` |
-| `--no-mermaid-png` | Skip Mermaid PNG fallback rendering | `false` |
-| `--viewport <width>` | Browser viewport width for screenshots | `1200` |
-| `--mermaid-theme <name>` | Mermaid theme: default, neutral, dark, forest, base | `neutral` |
-| `--no-zip` | Skip ZIP archive creation | `false` |
-| `-v, --verbose` | Show detailed progress output | `false` |
-| `-h, --help` | Show help | -- |
-
-### Examples
-
-```bash
-# Basic conversion
-npx html-to-notion convert report.html
-
-# Custom output directory with wider viewport
-npx html-to-notion convert dashboard.html -o ~/notion-import --viewport 1400
-
-# Text-only conversion (no browser needed)
-npx html-to-notion convert notes.html --no-screenshots --no-mermaid-png
-
-# Convert without ZIP (just the output directory)
-npx html-to-notion convert presentation.html -o output/ --no-zip
-
-# Use dark theme for Mermaid diagrams with verbose logging
-npx html-to-notion convert dashboard.html --mermaid-theme dark -v
-```
-
-## Architecture
-
-```
-                        html-to-notion convert input.html
-                                     |
-                                     v
-                          +---------------------+
-                          |   bin/html-to-notion |  CLI entry point (commander.js)
-                          +---------------------+
-                                     |
-                                     v
-                          +---------------------+
-                          |   src/assembler.js   |  Orchestrator
-                          +---------------------+
-                            /        |        \
-                           v         v         v
-                +-----------+  +-----------+  +------------------+
-                | converter  |  | screenshot|  | mermaid-renderer |
-                |   .py      |  |   er.js   |  |       .js        |
-                +-----------+  +-----------+  +------------------+
-                      |              |                  |
-                      v              v                  v
-                  Markdown +     PNG images         PNG fallback
-                  manifest +     of CSS visual      images of
-                  .mmd files     components         Mermaid diagrams
-                            \        |        /
-                             v       v       v
-                          +---------------------+
-                          |   notion_import.zip  |
-                          |   - document.md      |
-                          |   - images/*.png     |
-                          +---------------------+
-```
-
-## How It Works
-
-### 1. Converter (`src/converter.py`)
-
-Parses the input HTML with BeautifulSoup and walks the DOM tree. Each element type is detected by heuristic patterns (tag names, CSS classes, inline styles) and converted to the appropriate Markdown representation. Mermaid diagram source code is extracted to `.mmd` files. CSS-only visual components that cannot be represented in Markdown are registered in a screenshot manifest.
-
-### 2. Screenshotter (`src/screenshotter.js`)
-
-Opens the original HTML in a headless Chromium browser via Playwright. Reads the screenshot manifest and captures each registered CSS component (progress bars, stat cards, timelines, hero banners, comparison grids) as an individual PNG image.
-
-### 3. Mermaid Renderer (`src/mermaid-renderer.js`)
-
-Renders each extracted `.mmd` file to a PNG image using Mermaid.js loaded in a Playwright browser page. These serve as fallback images in case Notion's native Mermaid rendering is not configured.
-
-### 4. Assembler (`src/assembler.js`)
-
-Orchestrates the full pipeline: runs the converter, then the screenshotter and mermaid renderer, post-processes the Markdown to ensure image paths are correct, and bundles everything into a `notion_import.zip` ready for Notion import.
-
-## Requirements
-
-| Dependency | Version | Purpose |
-|-----------|---------|---------|
-| Node.js | >= 18.0.0 | CLI and JavaScript pipeline |
-| Python | >= 3.8 | HTML parsing and Markdown conversion |
-| Playwright | ^1.50.0 | Headless browser for screenshots |
-| beautifulsoup4 | >= 4.12.0 | HTML DOM parsing |
-| commander | ^12.0.0 | CLI argument parsing |
-
-### Installing Playwright Browsers
-
-Playwright requires a Chromium browser binary. Install it after `npm install`:
-
-```bash
-npx playwright install chromium
-```
-
 ## Contributing
 
 1. Fork the repository
@@ -197,8 +81,8 @@ npx playwright install chromium
 5. Submit a pull request
 
 When adding support for new HTML element types:
-- Add detection logic in `src/converter.py`
-- Add a screenshot selector in `src/screenshotter.js` if the element is CSS-only
+- Add detection logic in `scripts/converter.py`
+- Add a screenshot selector in `scripts/screenshotter.js` if the element is CSS-only
 - Update the "What Gets Preserved" table in this README
 
 ## License
